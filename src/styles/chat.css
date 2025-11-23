@@ -279,3 +279,20 @@
   .wa-sidebar { width: 100%; max-width: none; height: 44vh; }
   .wa-panel { height: 56vh; }
 }
+.wa-random-btn {
+  width: 100%;
+  background: var(--wa-green);
+  color: white;
+  padding: 10px 14px;
+  border-radius: 8px;
+  font-weight: bold;
+  border: none;
+  cursor: pointer;
+  font-size: 15px;
+  transition: 0.2s ease;
+}
+
+.wa-random-btn:hover {
+  background: #1ebe5d;
+  transform: scale(1.02);
+}

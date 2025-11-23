@@ -1,7 +1,14 @@
 import React from "react";
 import { uploadProfilePicture } from "../utils/fileUpload";
 
-const Sidebar = ({ users, currentUser, selectedUser, onSelectUser, setCurrentUser }) => {
+const Sidebar = ({
+  users,
+  currentUser,
+  selectedUser,
+  onSelectUser,
+  setCurrentUser,
+  onRandomCall,     // ⭐ NEW PROP
+}) => {
 
   // Upload profile picture
   const handleProfilePicUpload = async (e) => {
@@ -18,7 +25,7 @@ const Sidebar = ({ users, currentUser, selectedUser, onSelectUser, setCurrentUse
     }
   };
 
-  // ⭐ FINAL FIX — Avatar always forced 60x60 or 45x45
+  // Avatar Component
   const Avatar = ({ url, letter, size = "" }) => {
     const baseStyle = {
       borderRadius: "50%",
@@ -26,25 +33,20 @@ const Sidebar = ({ users, currentUser, selectedUser, onSelectUser, setCurrentUse
       display: "block",
     };
 
-    // Different size for main profile vs userlist
     const sizeStyle =
-      size === "small"
-        ? { width: 45, height: 45 }
-        : { width: 60, height: 60 };
+      size === "small" ? { width: 45, height: 45 } : { width: 60, height: 60 };
 
-    // If image exists
     if (url) {
       return (
         <img
           src={url}
           alt="avatar"
           className={`wa-avatar-img ${size}`}
-          style={{ ...baseStyle, ...sizeStyle }}   // ⭐ HARD ENFORCED
+          style={{ ...baseStyle, ...sizeStyle }}
         />
       );
     }
 
-    // Fallback letter avatar
     return (
       <div
         className={`wa-avatar ${size}`}
@@ -67,11 +69,11 @@ const Sidebar = ({ users, currentUser, selectedUser, onSelectUser, setCurrentUse
   return (
     <aside className="wa-sidebar">
 
-      {/* TOP SECTION */}
+      {/* TOP PROFILE SECTION */}
       <div className="wa-top">
         <div className="wa-profile">
 
-          {/* Click to Upload */}
+          {/* Avatar clickable for upload */}
           <div
             className="wa-avatar-wrapper"
             onClick={() => document.getElementById("profilePicInput").click()}
@@ -84,7 +86,7 @@ const Sidebar = ({ users, currentUser, selectedUser, onSelectUser, setCurrentUse
             />
           </div>
 
-          {/* Hidden file picker */}
+          {/* Hidden File Picker */}
           <input
             id="profilePicInput"
             type="file"
@@ -101,19 +103,28 @@ const Sidebar = ({ users, currentUser, selectedUser, onSelectUser, setCurrentUse
         </div>
       </div>
 
-      {/* Search bar */}
+      {/* SEARCH BAR */}
       <div className="wa-search">
         <input placeholder="Search or start new chat" />
       </div>
 
-      {/* User list */}
+      {/* RANDOM VIDEO CALL BUTTON */}
+      <div className="wa-random-section" style={{ padding: "10px" }}>
+        <button className="wa-random-btn" onClick={onRandomCall}>
+          🎲 Random Video Call
+        </button>
+      </div>
+
+      {/* USER LIST */}
       <div className="wa-list">
         {users
           .filter((u) => u.username !== currentUser.username)
           .map((u) => (
             <div
               key={u.username}
-              className={`wa-user ${selectedUser?.username === u.username ? "active" : ""}`}
+              className={`wa-user ${
+                selectedUser?.username === u.username ? "active" : ""
+              }`}
               onClick={() => onSelectUser(u)}
             >
               <div className="wa-user-left">
@@ -134,6 +145,7 @@ const Sidebar = ({ users, currentUser, selectedUser, onSelectUser, setCurrentUse
             </div>
           ))}
       </div>
+
     </aside>
   );
 };

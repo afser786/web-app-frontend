@@ -4,11 +4,13 @@ import ChatPanel from "./components/ChatPanel";
 import Login from "./components/Login";
 import Register from "./components/Register";
 import VideoCall from "./components/VideoCall";
-import { connectWebSocket } from "./ws/websocket";
-import Config from "./config";
-import "./styles/chat.css";
 import AIChatWidget from "./components/AIChatWidget";
 
+import { connectWebSocket } from "./ws/websocket";
+import { joinRandomQueue } from "./Services/randomCallService";   // ⭐ NEW
+
+import Config from "./config";
+import "./styles/chat.css";
 
 function App() {
   const [screen, setScreen] = useState("LOGIN");
@@ -74,7 +76,9 @@ function App() {
     }
   }, [screen]);
 
-  // AUTH HANDLERS --------------------------------------
+  // ----------------------------------------------------
+  // AUTH HANDLERS
+  // ----------------------------------------------------
   const handleLogin = (user) => {
     setCurrentUser({
       ...user,
@@ -99,7 +103,40 @@ function App() {
     if (window.stompClient) window.stompClient.deactivate();
   };
 
-  // LOGIN / REGISTER SCREEN HANDLING -------------------
+  // ----------------------------------------------------
+  // ⭐ RANDOM VIDEO CALL FUNCTION
+  // ----------------------------------------------------
+  const startRandomCall = async () => {
+    if (!currentUser) return;
+
+    const result = await joinRandomQueue(currentUser.username);
+
+    if (result.status === "WAITING") {
+      alert("🔍 Searching for a partner...");
+      return;
+    }
+
+    if (result.status === "MATCHED") {
+      const partner = result.partner;
+
+      setShowVideoCall(partner); // open call panel
+
+      // Start WebRTC offer via WebSocket
+      window.stompClient.send(
+        "/app/call",
+        {},
+        JSON.stringify({
+          type: "offer-init",
+          from: currentUser.username,
+          to: partner,
+        })
+      );
+    }
+  };
+
+  // ----------------------------------------------------
+  // LOGIN / REGISTER SCREEN
+  // ----------------------------------------------------
   if (screen === "LOGIN") {
     return <Login onLogin={handleLogin} onSwitch={() => setScreen("REGISTER")} />;
   }
@@ -108,7 +145,9 @@ function App() {
     return <Register onRegister={handleRegister} onSwitch={() => setScreen("LOGIN")} />;
   }
 
-  // MAIN CHAT SCREEN -----------------------------------
+  // ----------------------------------------------------
+  // MAIN CHAT SCREEN
+  // ----------------------------------------------------
   return (
     <div className="wa-app">
 
@@ -118,9 +157,8 @@ function App() {
         currentUser={currentUser}
         selectedUser={selectedUser}
         onSelectUser={setSelectedUser}
-        onLogout={handleLogout}
-        onVideoCall={(user) => setShowVideoCall(user)}
         setCurrentUser={setCurrentUser}
+        onRandomCall={startRandomCall}     // ⭐ NEW
       />
 
       {/* CHAT PANEL */}
@@ -128,13 +166,13 @@ function App() {
         currentUser={currentUser}
         selectedUser={selectedUser}
         allMessages={messageStore}
-        messages={messageStore[selectedUser?.username] || []}  // ⭐ FIXED
+        messages={messageStore[selectedUser?.username] || []}
         updateLocalMessages={setMessageStore}
         onVideoCall={() => setShowVideoCall(selectedUser?.username)}
       />
 
-      {/* AI CHAT SIDE PANEL */}
-     <AIChatWidget aiMessages={aiMessages} setAiMessages={setAiMessages} />
+      {/* AI CHAT WIDGET */}
+      <AIChatWidget aiMessages={aiMessages} setAiMessages={setAiMessages} />
 
       {/* VIDEO CALL POPUP */}
       {showVideoCall && (
@@ -147,6 +185,7 @@ function App() {
           />
         </div>
       )}
+
     </div>
   );
 }

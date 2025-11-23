@@ -14,6 +14,7 @@ const config = {
   // AI CONTROLLER
   AI_CHAT: `${BACKEND}/api/ai/chat`,
   UPLOAD_PROFILE: `${BACKEND}/api/user/upload-profile`,
+  RANDOM_CALL: `${BACKEND}/api/random/join`,
 };
 
 export default config;
