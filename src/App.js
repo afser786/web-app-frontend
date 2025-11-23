@@ -7,7 +7,7 @@ import VideoCall from "./components/VideoCall";
 import AIChatWidget from "./components/AIChatWidget";
 
 import { connectWebSocket } from "./ws/websocket";
-import { joinRandomQueue } from "./Services/randomCallService";   // ⭐ NEW
+import { joinRandomQueue } from "./Services/randomCallService";
 
 import Config from "./config";
 import "./styles/chat.css";
@@ -48,7 +48,7 @@ function App() {
       });
     });
 
-    // 🔥 VIDEO SIGNALS
+    // Video call signal handler
     window.onCallSignal = (signal) => {
       if (signal.type === "offer") {
         setShowVideoCall(signal.from);
@@ -66,7 +66,7 @@ function App() {
   }, [currentUser]);
 
   // ----------------------------------------------------
-  // 🔥 LOAD USER LIST
+  // LOAD USER LIST
   // ----------------------------------------------------
   useEffect(() => {
     if (screen === "CHAT") {
@@ -77,7 +77,7 @@ function App() {
   }, [screen]);
 
   // ----------------------------------------------------
-  // AUTH HANDLERS
+  // LOGIN & REGISTER
   // ----------------------------------------------------
   const handleLogin = (user) => {
     setCurrentUser({
@@ -95,33 +95,22 @@ function App() {
     setScreen("CHAT");
   };
 
-  const handleLogout = () => {
-    wsConnected.current = false;
-    setCurrentUser(null);
-    setSelectedUser(null);
-    setScreen("LOGIN");
-    if (window.stompClient) window.stompClient.deactivate();
-  };
-
   // ----------------------------------------------------
-  // ⭐ RANDOM VIDEO CALL FUNCTION
+  // ⭐ RANDOM VIDEO CALL — NEXT MATCH
   // ----------------------------------------------------
-  const startRandomCall = async () => {
-    if (!currentUser) return;
-
+  const handleNextRandom = async () => {
     const result = await joinRandomQueue(currentUser.username);
 
     if (result.status === "WAITING") {
-      alert("🔍 Searching for a partner...");
+      alert("🔍 Finding a new random partner...");
       return;
     }
 
     if (result.status === "MATCHED") {
       const partner = result.partner;
 
-      setShowVideoCall(partner); // open call panel
+      setShowVideoCall(partner);
 
-      // Start WebRTC offer via WebSocket
       window.stompClient.send(
         "/app/call",
         {},
@@ -135,14 +124,24 @@ function App() {
   };
 
   // ----------------------------------------------------
-  // LOGIN / REGISTER SCREEN
+  // LOGIN / REGISTER SCREEN HANDLING
   // ----------------------------------------------------
   if (screen === "LOGIN") {
-    return <Login onLogin={handleLogin} onSwitch={() => setScreen("REGISTER")} />;
+    return (
+      <Login
+        onLogin={handleLogin}
+        onSwitch={() => setScreen("REGISTER")}
+      />
+    );
   }
 
   if (screen === "REGISTER") {
-    return <Register onRegister={handleRegister} onSwitch={() => setScreen("LOGIN")} />;
+    return (
+      <Register
+        onRegister={handleRegister}
+        onSwitch={() => setScreen("LOGIN")}
+      />
+    );
   }
 
   // ----------------------------------------------------
@@ -158,7 +157,7 @@ function App() {
         selectedUser={selectedUser}
         onSelectUser={setSelectedUser}
         setCurrentUser={setCurrentUser}
-        onRandomCall={startRandomCall}     // ⭐ NEW
+        onRandomCall={handleNextRandom}   // 🔥 random call starts here
       />
 
       {/* CHAT PANEL */}
@@ -182,6 +181,7 @@ function App() {
             currentUser={currentUser}
             targetUser={showVideoCall}
             onClose={() => setShowVideoCall(null)}
+            onNext={handleNextRandom}   // 🔥 NEXT button callback
           />
         </div>
       )}

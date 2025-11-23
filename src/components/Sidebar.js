@@ -7,10 +7,9 @@ const Sidebar = ({
   selectedUser,
   onSelectUser,
   setCurrentUser,
-  onRandomCall,     // ⭐ NEW PROP
+  onRandomCall,    // ⭐ NEW
 }) => {
 
-  // Upload profile picture
   const handleProfilePicUpload = async (e) => {
     const file = e.target.files[0];
     if (!file) return;
@@ -25,7 +24,6 @@ const Sidebar = ({
     }
   };
 
-  // Avatar Component
   const Avatar = ({ url, letter, size = "" }) => {
     const baseStyle = {
       borderRadius: "50%",
@@ -69,16 +67,13 @@ const Sidebar = ({
   return (
     <aside className="wa-sidebar">
 
-      {/* TOP PROFILE SECTION */}
+      {/* TOP PROFILE */}
       <div className="wa-top">
         <div className="wa-profile">
-
-          {/* Avatar clickable for upload */}
           <div
             className="wa-avatar-wrapper"
             onClick={() => document.getElementById("profilePicInput").click()}
             style={{ cursor: "pointer" }}
-            title="Click to change profile picture"
           >
             <Avatar
               url={currentUser.profileImageUrl}
@@ -86,7 +81,6 @@ const Sidebar = ({
             />
           </div>
 
-          {/* Hidden File Picker */}
           <input
             id="profilePicInput"
             type="file"
@@ -99,7 +93,6 @@ const Sidebar = ({
             <div className="wa-username">{currentUser.username}</div>
             <div className="wa-status">Online</div>
           </div>
-
         </div>
       </div>
 
@@ -109,7 +102,7 @@ const Sidebar = ({
       </div>
 
       {/* RANDOM VIDEO CALL BUTTON */}
-      <div className="wa-random-section" style={{ padding: "10px" }}>
+      <div style={{ padding: "10px" }}>
         <button className="wa-random-btn" onClick={onRandomCall}>
           🎲 Random Video Call
         </button>
