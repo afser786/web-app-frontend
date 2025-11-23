@@ -48,7 +48,7 @@ function App() {
       });
     });
 
-    // 🔥 Video call signal handler
+    // WebRTC signals
     window.onCallSignal = (signal) => {
       if (signal.type === "offer") {
         setShowVideoCall(signal.from);
@@ -66,7 +66,7 @@ function App() {
   }, [currentUser]);
 
   // ----------------------------------------------------
-  // LOAD USER LIST WHEN ENTERING CHAT SCREEN
+  // LOAD USER LIST
   // ----------------------------------------------------
   useEffect(() => {
     if (screen === "CHAT") {
@@ -77,7 +77,7 @@ function App() {
   }, [screen]);
 
   // ----------------------------------------------------
-  // LOGIN & REGISTER
+  // LOGIN / REGISTER
   // ----------------------------------------------------
   const handleLogin = (user) => {
     setCurrentUser({
@@ -96,9 +96,11 @@ function App() {
   };
 
   // ----------------------------------------------------
-  // ⭐ RANDOM VIDEO CALL → NEXT MATCH (FIXED)
+  // ⭐ RANDOM VIDEO CALL
   // ----------------------------------------------------
   const handleNextRandom = async () => {
+    console.log("🟦 Random button clicked");
+
     while (true) {
       const result = await joinRandomQueue(currentUser.username);
 
@@ -110,14 +112,14 @@ function App() {
       if (result.status === "MATCHED") {
         const partner = result.partner;
 
-        // 🔥 FIX: prevent self-match
         if (partner === currentUser.username) {
-          console.warn("Matched with yourself — retrying...");
-          await new Promise((res) => setTimeout(res, 600));
-          continue; // 🔁 retry again
+          console.log("⚠ Matched with yourself, retrying...");
+          await new Promise((r) => setTimeout(r, 500));
+          continue;
         }
 
-        // 🎉 Valid partner found
+        console.log("🟩 MATCHED WITH:", partner);
+
         setShowVideoCall(partner);
 
         window.stompClient.publish({
@@ -129,39 +131,28 @@ function App() {
           }),
         });
 
-        break; // exit loop
+        break;
       }
     }
   };
 
   // ----------------------------------------------------
-  // LOGIN / REGISTER SCREEN RENDERING
+  // LOGIN / REGISTER SCREEN
   // ----------------------------------------------------
   if (screen === "LOGIN") {
-    return (
-      <Login
-        onLogin={handleLogin}
-        onSwitch={() => setScreen("REGISTER")}
-      />
-    );
+    return <Login onLogin={handleLogin} onSwitch={() => setScreen("REGISTER")} />;
   }
 
   if (screen === "REGISTER") {
-    return (
-      <Register
-        onRegister={handleRegister}
-        onSwitch={() => setScreen("LOGIN")}
-      />
-    );
+    return <Register onRegister={handleRegister} onSwitch={() => setScreen("LOGIN")} />;
   }
 
   // ----------------------------------------------------
-  // MAIN CHAT UI
+  // MAIN CHAT SCREEN
   // ----------------------------------------------------
   return (
     <div className="wa-app">
 
-      {/* LEFT SIDEBAR */}
       <Sidebar
         users={users}
         currentUser={currentUser}
@@ -171,7 +162,6 @@ function App() {
         onRandomCall={handleNextRandom}
       />
 
-      {/* CHAT PANEL */}
       <ChatPanel
         currentUser={currentUser}
         selectedUser={selectedUser}
@@ -181,13 +171,8 @@ function App() {
         onVideoCall={() => setShowVideoCall(selectedUser?.username)}
       />
 
-      {/* AI CHAT WIDGET */}
-      <AIChatWidget
-        aiMessages={aiMessages}
-        setAiMessages={setAiMessages}
-      />
+      <AIChatWidget aiMessages={aiMessages} setAiMessages={setAiMessages} />
 
-      {/* VIDEO CALL POPUP */}
       {showVideoCall && (
         <div className="video-call-wrapper active">
           <VideoCall
@@ -199,6 +184,7 @@ function App() {
           />
         </div>
       )}
+
     </div>
   );
 }
