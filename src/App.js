@@ -27,7 +27,7 @@ function App() {
   const wsConnected = useRef(false);
 
   // ----------------------------------------------------
-  // 🔥 WEBSOCKET CONNECTION
+  // WEBSOCKET CONNECTION
   // ----------------------------------------------------
   useEffect(() => {
     if (!currentUser || wsConnected.current) return;
@@ -48,7 +48,7 @@ function App() {
       });
     });
 
-    // Video call signal handler
+    // 🔥 Video call signal handler
     window.onCallSignal = (signal) => {
       if (signal.type === "offer") {
         setShowVideoCall(signal.from);
@@ -66,7 +66,7 @@ function App() {
   }, [currentUser]);
 
   // ----------------------------------------------------
-  // LOAD USER LIST
+  // LOAD USER LIST WHEN ENTERING CHAT SCREEN
   // ----------------------------------------------------
   useEffect(() => {
     if (screen === "CHAT") {
@@ -96,35 +96,46 @@ function App() {
   };
 
   // ----------------------------------------------------
-  // ⭐ RANDOM VIDEO CALL — NEXT MATCH
+  // ⭐ RANDOM VIDEO CALL → NEXT MATCH (FIXED)
   // ----------------------------------------------------
   const handleNextRandom = async () => {
-    const result = await joinRandomQueue(currentUser.username);
+    while (true) {
+      const result = await joinRandomQueue(currentUser.username);
 
-    if (result.status === "WAITING") {
-      alert("🔍 Finding a new random partner...");
-      return;
-    }
+      if (result.status === "WAITING") {
+        alert("🔍 Finding a new random partner...");
+        return;
+      }
 
-    if (result.status === "MATCHED") {
-      const partner = result.partner;
+      if (result.status === "MATCHED") {
+        const partner = result.partner;
 
-      setShowVideoCall(partner);
+        // 🔥 FIX: prevent self-match
+        if (partner === currentUser.username) {
+          console.warn("Matched with yourself — retrying...");
+          await new Promise((res) => setTimeout(res, 600));
+          continue; // 🔁 retry again
+        }
 
-      window.stompClient.send(
-        "/app/call",
-        {},
-        JSON.stringify({
-          type: "offer-init",
-          from: currentUser.username,
-          to: partner,
-        })
-      );
+        // 🎉 Valid partner found
+        setShowVideoCall(partner);
+
+        window.stompClient.publish({
+          destination: "/app/call",
+          body: JSON.stringify({
+            type: "offer-init",
+            from: currentUser.username,
+            to: partner,
+          }),
+        });
+
+        break; // exit loop
+      }
     }
   };
 
   // ----------------------------------------------------
-  // LOGIN / REGISTER SCREEN HANDLING
+  // LOGIN / REGISTER SCREEN RENDERING
   // ----------------------------------------------------
   if (screen === "LOGIN") {
     return (
@@ -145,7 +156,7 @@ function App() {
   }
 
   // ----------------------------------------------------
-  // MAIN CHAT SCREEN
+  // MAIN CHAT UI
   // ----------------------------------------------------
   return (
     <div className="wa-app">
@@ -157,7 +168,7 @@ function App() {
         selectedUser={selectedUser}
         onSelectUser={setSelectedUser}
         setCurrentUser={setCurrentUser}
-        onRandomCall={handleNextRandom}   // 🔥 random call starts here
+        onRandomCall={handleNextRandom}
       />
 
       {/* CHAT PANEL */}
@@ -171,7 +182,10 @@ function App() {
       />
 
       {/* AI CHAT WIDGET */}
-      <AIChatWidget aiMessages={aiMessages} setAiMessages={setAiMessages} />
+      <AIChatWidget
+        aiMessages={aiMessages}
+        setAiMessages={setAiMessages}
+      />
 
       {/* VIDEO CALL POPUP */}
       {showVideoCall && (
@@ -181,11 +195,10 @@ function App() {
             currentUser={currentUser}
             targetUser={showVideoCall}
             onClose={() => setShowVideoCall(null)}
-            onNext={handleNextRandom}   // 🔥 NEXT button callback
+            onNext={handleNextRandom}
           />
         </div>
       )}
-
     </div>
   );
 }
