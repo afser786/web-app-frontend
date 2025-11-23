@@ -17,29 +17,30 @@ const ChatPanel = ({ currentUser, selectedUser, messages, updateLocalMessages, o
 
   // Load OLD messages from backend
   useEffect(() => {
-    if (!selectedUser) return;
+  if (!selectedUser) return;
 
-    async function loadHistory() {
-      try {
-        const res = await fetch(
-          `${Config.BACKEND}/api/messages/${currentUser.username}/${selectedUser.username}`
-        );
+  async function loadHistory() {
+    try {
+      const res = await fetch(
+        `${Config.BACKEND}/api/messages/${currentUser.username}/${selectedUser.username}`
+      );
 
-        if (!res.ok) throw new Error("Failed to load");
+      if (!res.ok) throw new Error("Failed to load history");
 
-        const data = await res.json();
+      const data = await res.json();
 
-        updateLocalMessages(prev => ({
-          ...prev,
-          [selectedUser.username]: data
-        }));
-      } catch (error) {
-        console.error("Error loading history:", error);
-      }
+      updateLocalMessages(prev => ({
+        ...prev,
+        [selectedUser.username]: data
+      }));
+    } catch (err) {
+      console.error("Chat history load error:", err);
     }
+  }
 
-    loadHistory();
-  }, [selectedUser]);
+  loadHistory();
+}, [selectedUser, currentUser.username, updateLocalMessages]);
+
 
   // Send text message
   const sendMessage = () => {
