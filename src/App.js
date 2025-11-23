@@ -3,11 +3,12 @@ import Sidebar from "./components/Sidebar";
 import ChatPanel from "./components/ChatPanel";
 import Login from "./components/Login";
 import Register from "./components/Register";
-import AIChatBox from "./components/AIChatBox";
 import VideoCall from "./components/VideoCall";
 import { connectWebSocket } from "./ws/websocket";
 import Config from "./config";
 import "./styles/chat.css";
+import AIChatWidget from "./components/AIChatWidget";
+
 
 function App() {
   const [screen, setScreen] = useState("LOGIN");
@@ -133,7 +134,7 @@ function App() {
       />
 
       {/* AI CHAT SIDE PANEL */}
-      <AIChatBox messages={aiMessages} setMessages={setAiMessages} />
+     <AIChatWidget aiMessages={aiMessages} setAiMessages={setAiMessages} />
 
       {/* VIDEO CALL POPUP */}
       {showVideoCall && (
