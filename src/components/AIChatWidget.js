@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import AIChatBox from "./AIChatBox";
-import "./AIChatWidget.css";
+import "../styles/AIChatWidget.css";
 
 function AIChatWidget({ aiMessages, setAiMessages }) {
   const [open, setOpen] = useState(false);
