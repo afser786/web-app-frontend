@@ -115,9 +115,8 @@ const Sidebar = ({
           .map((u) => (
             <div
               key={u.username}
-              className={`wa-user ${
-                selectedUser?.username === u.username ? "active" : ""
-              }`}
+              className={`wa-user ${selectedUser?.username === u.username ? "active" : ""
+                }`}
               onClick={() => onSelectUser(u)}
             >
               <div className="wa-user-left">
