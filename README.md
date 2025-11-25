@@ -1,70 +1,94 @@
-# Getting Started with Create React App
+👋 Hi, I'm Afser Hussain
+🚀 Senior Software Developer | Java | Spring Boot | Microservices | Cloud | React
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+I build high-performance backend systems, real-time chat/video applications, secure authentication flows, and scalable cloud-native apps.
+Passionate about solving real-world problems with clean architecture, automation, and modern engineering practices.
 
-## Available Scripts
+🔥 About Me
 
-In the project directory, you can run:
+💼 Senior Software Developer (Java, Spring Boot, Microservices, Cloud)
 
-### `npm start`
+🏦 Worked on high-TPS banking applications (1000+ transactions/sec) using AWS (KMS, EC2, S3, Redis, Load Balancers)
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+🧪 Experience in pharma, enterprise systems, and mission-critical apps
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+💬 I love building real-time chat/video apps with WebRTC, WebSockets & scalable backend
 
-### `npm test`
+🛠 Focus on high performance, security, encryption, CI/CD, and production-grade deployments
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+🎯 Preparing for advanced Java/Spring Boot interviews & system design
 
-### `npm run build`
+📚 Always learning: Cloud, DSA, security, distributed systems
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+🛠 Tech Stack
+Backend
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+Java 8–22 • Spring Boot • Spring Security • JWT • Microservices
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+REST APIs • JPA • Hibernate • Maven • Kafka • Redis
 
-### `npm run eject`
+Frontend
 
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
+React.js • JavaScript • HTML • CSS
 
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+Cloud & DevOps
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
+AWS (EC2, S3, KMS, IAM, SNS, SQS)
 
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
+Docker • Kubernetes • Terraform
 
-## Learn More
+Nginx • CI/CD (GitHub Actions, Azure DevOps)
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+Databases
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+MySQL • PostgreSQL • SQL Server • Oracle SQL
 
-### Code Splitting
+🔧 Featured Projects
+💬 Real-Time Chat Application
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
+WebSockets (STOMP)
 
-### Analyzing the Bundle Size
+One-to-one & group chat
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
+Video calling using WebRTC
 
-### Making a Progressive Web App
+File/image upload (Azure Blob Storage)
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
+React frontend + Spring Boot backend
 
-### Advanced Configuration
+JWT authentication
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
+Deployed with Docker, Nginx, and CI/CD
 
-### Deployment
+⚙️ Incident Management System
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
+Secure user registration & login
 
-### `npm run build` fails to minify
+Role-based access control
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+Unique incident ID generation
+
+Country-wise timezone handling
+
+MySQL / PostgreSQL backend
+
+🔐 Secure API with JWT, Roles & Permissions
+
+Spring Boot 3
+
+Bidder & Approver role-based API access
+
+Refresh/Access token model
+
+📊 GitHub Stats
+
+📫 Connect With Me
+
+💼 LinkedIn: https://www.linkedin.com/in/afser-hussain-44b2b3b9/
+
+📧 Email: afhussain20@gmail.com
+
+❤️ Thanks for visiting!
+
+If you like my work, consider ⭐ starring my repositories or connecting with me!
+I'm always open to collaborations, discussions, and exciting opportunities.
