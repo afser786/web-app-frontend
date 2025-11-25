@@ -1,0 +1,32 @@
+language: "en"
+
+review:
+  level: "deep"
+  enable_inline: true
+  enable_summary: true
+  explain_code: true
+  auto_review_on_push: true
+
+rules:
+  react_best_practices: true
+  detect_security_risks: true
+  detect_xss: true
+  detect_insecure_localstorage: true
+  validate_api_calls: true
+  optimize_performance: true
+  check_hooks_rules: true
+  check_component_re_render: true
+  check_websocket_handling: true
+
+tests:
+  generate_unit_tests: true
+  framework: "jest"
+
+ignore:
+  - "build/"
+  - "node_modules/"
+  - "*.map"
+  - "*.min.js"
+
+general_settings:
+  max_review_length: 7000
