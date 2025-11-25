@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { sendPrivateMessage } from "../websocket/websocket";
 import { uploadFileToBackend } from "../utils/fileUpload";
+import { FiPaperclip } from "react-icons/fi";
 
 export default function ChatInput({ sender, receiver }) {
   const [message, setMessage] = useState("");
@@ -20,12 +21,12 @@ export default function ChatInput({ sender, receiver }) {
 
   const onFileSelect = async (event) => {
     const file = event.target.files[0];
-    console.log("FILE SELECTED:", file);
+    //console.log("FILE SELECTED:", file);
 
     if (!file) return;
 
     const fileUrl = await uploadFileToBackend(file);
-    console.log("UPLOAD URL:", fileUrl);
+    //console.log("UPLOAD URL:", fileUrl);
 
     sendPrivateMessage({
       sender,
@@ -40,12 +41,12 @@ export default function ChatInput({ sender, receiver }) {
 
       {/* FIXED FILE UPLOAD BUTTON */}
       <button
-        type="button"
-        className="file-upload-btn"
-        onClick={() => document.getElementById("hiddenFileInput").click()}
-      >
-        📎
-      </button>
+  type="button"
+  className="file-upload-btn"
+  onClick={() => document.getElementById("hiddenFileInput").click()}
+>
+  <FiPaperclip size={20} />
+</button>
 
       <input
         id="hiddenFileInput"
