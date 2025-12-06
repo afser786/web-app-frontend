@@ -1,4 +1,14 @@
 export default function ChatBubble({ msg, isSender }) {
+
+  const formatTime = (ts) => {
+    if (!ts) return "";
+    return new Date(ts).toLocaleTimeString("en-IN", {
+      hour: "2-digit",
+      minute: "2-digit",
+      hour12: true
+    });
+  };
+
   if (msg.type === "IMAGE") {
     return (
       <div className={`bubble ${isSender ? "sender" : "receiver"}`}>
@@ -8,6 +18,7 @@ export default function ChatBubble({ msg, isSender }) {
           className="chat-image"
           style={{ maxWidth: "200px", borderRadius: "8px" }}
         />
+        <div className="msg-time">{formatTime(msg.timestamp)}</div>
       </div>
     );
   }
@@ -18,6 +29,7 @@ export default function ChatBubble({ msg, isSender }) {
         <a href={msg.content} target="_blank" rel="noreferrer">
           📄 Download File
         </a>
+        <div className="msg-time">{formatTime(msg.timestamp)}</div>
       </div>
     );
   }
@@ -25,7 +37,8 @@ export default function ChatBubble({ msg, isSender }) {
   // TEXT
   return (
     <div className={`bubble ${isSender ? "sender" : "receiver"}`}>
-      {msg.content}
+      <div className="msg-text">{msg.content}</div>
+      <div className="msg-time">{formatTime(msg.timestamp)}</div>
     </div>
   );
 }

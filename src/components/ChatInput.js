@@ -14,6 +14,7 @@ export default function ChatInput({ sender, receiver }) {
       receiver,
       content: message,
       type: "TEXT",
+      timestamp: new Date().toISOString()  // ⭐ ADD TIMESTAMP
     });
 
     setMessage("");
@@ -21,32 +22,30 @@ export default function ChatInput({ sender, receiver }) {
 
   const onFileSelect = async (event) => {
     const file = event.target.files[0];
-    //console.log("FILE SELECTED:", file);
-
     if (!file) return;
 
     const fileUrl = await uploadFileToBackend(file);
-    //console.log("UPLOAD URL:", fileUrl);
 
     sendPrivateMessage({
       sender,
       receiver,
       content: fileUrl,
       type: file.type.startsWith("image") ? "IMAGE" : "FILE",
+      timestamp: new Date().toISOString()  // ⭐ ADD TIMESTAMP
     });
   };
 
   return (
     <div className="chat-input-container">
 
-      {/* FIXED FILE UPLOAD BUTTON */}
+      {/* FILE UPLOAD BUTTON */}
       <button
-  type="button"
-  className="file-upload-btn"
-  onClick={() => document.getElementById("hiddenFileInput").click()}
->
-  <FiPaperclip size={20} />
-</button>
+        type="button"
+        className="file-upload-btn"
+        onClick={() => document.getElementById("hiddenFileInput").click()}
+      >
+        <FiPaperclip size={20} />
+      </button>
 
       <input
         id="hiddenFileInput"
@@ -62,7 +61,9 @@ export default function ChatInput({ sender, receiver }) {
         placeholder="Type a message…"
       />
 
-      <button className="send-btn" onClick={onSend}>Send</button>
+      <button className="send-btn" onClick={onSend}>
+        Send
+      </button>
     </div>
   );
 }
