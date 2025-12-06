@@ -8,14 +8,16 @@ const ChatPanel = ({ currentUser, selectedUser, messages, updateLocalMessages, o
   const [input, setInput] = useState("");
   const scrollRef = useRef(null);
 
-  // Auto scroll
+  // Auto-scroll to bottom on new messages
   useEffect(() => {
     if (scrollRef.current) {
       scrollRef.current.scrollTop = scrollRef.current.scrollHeight;
     }
   }, [messages]);
 
-  // Load OLD messages from backend
+  // =============================
+  // ⭐ LOAD OLD CHAT HISTORY
+  // =============================
   useEffect(() => {
     if (!selectedUser) return;
 
@@ -29,10 +31,17 @@ const ChatPanel = ({ currentUser, selectedUser, messages, updateLocalMessages, o
 
         const data = await res.json();
 
+        // ⭐ FIX: Ensure every message has a timestamp
+        const cleanData = data.map(msg => ({
+          ...msg,
+          timestamp: msg.timestamp || new Date().toISOString(), // ← FIX
+        }));
+
         updateLocalMessages(prev => ({
           ...prev,
-          [selectedUser.username]: data
+          [selectedUser.username]: cleanData,
         }));
+
       } catch (err) {
         console.error("Chat history load error:", err);
       }
@@ -41,8 +50,9 @@ const ChatPanel = ({ currentUser, selectedUser, messages, updateLocalMessages, o
     loadHistory();
   }, [selectedUser, currentUser.username, updateLocalMessages]);
 
-
-  // Send text message
+  // =============================
+  // ⭐ SEND TEXT MESSAGE
+  // =============================
   const sendMessage = () => {
     if (!input.trim() || !selectedUser) return;
 
@@ -51,19 +61,21 @@ const ChatPanel = ({ currentUser, selectedUser, messages, updateLocalMessages, o
       receiver: selectedUser.username,
       content: input.trim(),
       type: "TEXT",
-      timestamp: new Date().toISOString()
+      timestamp: new Date().toISOString(), // always send timestamp
     };
 
     updateLocalMessages(prev => ({
       ...prev,
-      [selectedUser.username]: [...(prev[selectedUser.username] || []), msg]
+      [selectedUser.username]: [...(prev[selectedUser.username] || []), msg],
     }));
 
     sendPrivateMessage(msg);
     setInput("");
   };
 
-  // Send file / image
+  // =============================
+  // ⭐ SEND FILE / IMAGE
+  // =============================
   const handleFileSelect = async (e) => {
     const file = e.target.files[0];
     if (!file) return;
@@ -75,17 +87,18 @@ const ChatPanel = ({ currentUser, selectedUser, messages, updateLocalMessages, o
       receiver: selectedUser.username,
       content: fileUrl,
       type: file.type.startsWith("image") ? "IMAGE" : "FILE",
-      timestamp: new Date().toISOString(),
+      timestamp: new Date().toISOString(), // always send timestamp
     };
 
     updateLocalMessages(prev => ({
       ...prev,
-      [selectedUser.username]: [...(prev[selectedUser.username] || []), msg]
+      [selectedUser.username]: [...(prev[selectedUser.username] || []), msg],
     }));
 
     sendPrivateMessage(msg);
   };
 
+  // If no user selected
   if (!selectedUser) {
     return (
       <main className="wa-panel empty">
@@ -94,6 +107,9 @@ const ChatPanel = ({ currentUser, selectedUser, messages, updateLocalMessages, o
     );
   }
 
+  // =============================
+  // ⭐ UI
+  // =============================
   return (
     <main className="wa-panel">
       <div className="wa-header">
@@ -122,7 +138,6 @@ const ChatPanel = ({ currentUser, selectedUser, messages, updateLocalMessages, o
       </div>
 
       <div className="wa-input-bar">
-
         <button
           type="button"
           className="file-upload-btn"
