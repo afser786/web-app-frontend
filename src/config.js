@@ -1,4 +1,4 @@
-const BACKEND = process.env.REACT_APP_BACKEND_URL || "https://afser.duckdns.org";
+const BACKEND = process.env.REACT_APP_BACKEND_URL || "https://afserchat.duckdns.org";
 
 const config = {
   BACKEND,
