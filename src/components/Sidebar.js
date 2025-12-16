@@ -1,5 +1,7 @@
 import React from "react";
 import { uploadProfilePicture } from "../utils/fileUpload";
+import { List } from "react-window";
+import AutoSizer from "react-virtualized-auto-sizer";
 
 const Sidebar = ({
   users,
@@ -7,7 +9,7 @@ const Sidebar = ({
   selectedUser,
   onSelectUser,
   setCurrentUser,
-  onRandomCall,    // ⭐ NEW
+  onRandomCall,
 }) => {
 
   const handleProfilePicUpload = async (e) => {
@@ -64,6 +66,42 @@ const Sidebar = ({
     );
   };
 
+  // Filter users once
+  const filteredUsers = users.filter((u) => u.username !== currentUser.username);
+
+  // Row component for react-window
+  const UserRow = ({ index, style }) => {
+    const u = filteredUsers[index];
+    const isActive = selectedUser?.username === u.username;
+
+    // We add a wrapper with "style" because react-window positions items absolutely
+    return (
+      <div style={style}>
+        <div
+          className={`wa-user ${isActive ? "active" : ""}`}
+          onClick={() => onSelectUser(u)}
+          style={{ height: "100%", boxSizing: "border-box" }} // Ensure it fits the row
+        >
+          <div className="wa-user-left">
+            <Avatar
+              url={u.profileImageUrl}
+              letter={u.username[0].toUpperCase()}
+              size="small"
+            />
+          </div>
+
+          <div className="wa-user-main">
+            <div className="wa-user-top">
+              <div className="wa-user-name">{u.username}</div>
+              <div className="wa-user-time">Now</div>
+            </div>
+            <div className="wa-user-last">Tap to message</div>
+          </div>
+        </div>
+      </div>
+    );
+  };
+
   return (
     <aside className="wa-sidebar">
 
@@ -108,34 +146,20 @@ const Sidebar = ({
         </button>
       </div>
 
-      {/* USER LIST */}
+      {/* VIRTUALIZED USER LIST */}
       <div className="wa-list">
-        {users
-          .filter((u) => u.username !== currentUser.username)
-          .map((u) => (
-            <div
-              key={u.username}
-              className={`wa-user ${selectedUser?.username === u.username ? "active" : ""
-                }`}
-              onClick={() => onSelectUser(u)}
+        <AutoSizer>
+          {({ height, width }) => (
+            <List
+              height={height}
+              width={width}
+              itemCount={filteredUsers.length}
+              itemSize={75} // Height of one row
             >
-              <div className="wa-user-left">
-                <Avatar
-                  url={u.profileImageUrl}
-                  letter={u.username[0].toUpperCase()}
-                  size="small"
-                />
-              </div>
-
-              <div className="wa-user-main">
-                <div className="wa-user-top">
-                  <div className="wa-user-name">{u.username}</div>
-                  <div className="wa-user-time">Now</div>
-                </div>
-                <div className="wa-user-last">Tap to message</div>
-              </div>
-            </div>
-          ))}
+              {UserRow}
+            </List>
+          )}
+        </AutoSizer>
       </div>
 
     </aside>
