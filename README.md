@@ -6,7 +6,7 @@ Passionate about solving real-world problems with clean architecture, automation
 
 🔥 About Me
 
-💼 Senior Software Developer (Java, Spring Boot, Microservices, Cloud).
+💼 Senior Software Developer (Java, Spring Boot, Microservices, Cloud)
 
 🏦 Worked on high-TPS banking applications (1000+ transactions/sec) using AWS (KMS, EC2, S3, Redis, Load Balancers)
 
