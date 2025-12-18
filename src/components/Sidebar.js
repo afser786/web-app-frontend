@@ -1,5 +1,5 @@
 import React from "react";
-import { FixedSizeList as List } from "react-window";
+import { List } from "react-window";
 import AutoSizer from "react-virtualized-auto-sizer";
 import { uploadProfilePicture } from "../utils/fileUpload";
 
