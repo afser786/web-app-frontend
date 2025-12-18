@@ -1,16 +1,20 @@
 import React from "react";
-import { List } from "react-window";
+import { FixedSizeList } from "react-window";
 import AutoSizer from "react-virtualized-auto-sizer";
 import { uploadProfilePicture } from "../utils/fileUpload";
 
 const Sidebar = ({
-  users,
+  users = [],
   currentUser,
   selectedUser,
   onSelectUser,
   setCurrentUser,
   onRandomCall,
 }) => {
+  // 🛑 Defensive guard (VERY IMPORTANT)
+  if (!currentUser || !Array.isArray(users)) {
+    return null;
+  }
 
   const handleProfilePicUpload = async (e) => {
     const file = e.target.files[0];
@@ -68,14 +72,16 @@ const Sidebar = ({
     );
   };
 
-  // Filter users (excluding self)
+  // Filter users (exclude self safely)
   const filteredUsers = users.filter(
-    (u) => u.username !== currentUser.username
+    (u) => u?.username && u.username !== currentUser.username
   );
 
   // Row renderer for react-window
   const UserRow = ({ index, style }) => {
     const u = filteredUsers[index];
+    if (!u) return null;
+
     const isActive = selectedUser?.username === u.username;
 
     return (
@@ -106,7 +112,6 @@ const Sidebar = ({
 
   return (
     <aside className="wa-sidebar">
-
       {/* TOP PROFILE */}
       <div className="wa-top">
         <div className="wa-profile">
@@ -150,22 +155,21 @@ const Sidebar = ({
         </button>
       </div>
 
-      {/* USER LIST */}
+      {/* USER LIST (VIRTUALIZED) */}
       <div className="wa-list">
         <AutoSizer>
           {({ height, width }) => (
-            <List
+            <FixedSizeList
               height={height}
               width={width}
               itemCount={filteredUsers.length}
               itemSize={75}
             >
               {UserRow}
-            </List>
+            </FixedSizeList>
           )}
         </AutoSizer>
       </div>
-
     </aside>
   );
 };
