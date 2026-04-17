@@ -10,7 +10,7 @@ Passionate about solving real-world problems with clean architecture, automation
 
 🏦 Worked on high-TPS banking applications (1000+ transactions/sec) using AWS (KMS, EC2, S3, Redis, Load Balancers)
 
-🧪 Experience in pharma, enterprise systems, and mission-critical apps
+🧪 Experience in pharma, enterprise systems, and mission-critical apps.
 
 💬 I love building real-time chat/video apps with WebRTC, WebSockets & scalable backend
 
