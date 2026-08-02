@@ -1,5 +1,5 @@
 👋 Hi, I'm Afser Hussain
-🚀 Senior Software Developer | Java | Spring Boot | Microservices | Cloud | React
+🚀 Senior Software Developer | Java | Spring Boot | Microservices | Azure Cloud | React
 
 I build high-performance backend systems, real-time chat/video applications, secure authentication flows, and scalable cloud-native apps.
 Passionate about solving real-world problems with clean architecture, automation, and modern engineering practices.
