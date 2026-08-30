@@ -29,6 +29,8 @@ function App() {
   // ----------------------------------------------------
   // WEBSOCKET CONNECTION
   // ----------------------------------------------------
+  // test for coderabbit review
+
   useEffect(() => {
     if (!currentUser || wsConnected.current) return;
 
